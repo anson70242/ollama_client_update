@@ -1,0 +1,37 @@
+#!/bin/bash
+# update_ollama: Updates Ollama, modifies its systemd service,
+# reloads systemd, restarts the service, and updates firewall settings.
+
+# Step 1: Update Ollama using the install script
+echo "Updating Ollama..."
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Step 2: Modify the systemd service file to add two environment variables
+SERVICE_FILE="/etc/systemd/system/ollama.service"
+
+if [ -f "$SERVICE_FILE" ]; then
+  # Check if the new environment variables are already present
+  if ! grep -q 'Environment="OLLAMA_HOST=0.0.0.0:11434"' "$SERVICE_FILE"; then
+    echo "Modifying $SERVICE_FILE to add new environment variables..."
+    # Insert the two environment variable lines right before the [Install] section
+    sudo sed -i '/^\[Install\]/i Environment="OLLAMA_HOST=0.0.0.0:11434"\
+Environment="OLLAMA_ORIGINS=http:\/\/0.0.0.0:11434"' "$SERVICE_FILE"
+  else
+    echo "Environment variables already present in $SERVICE_FILE."
+  fi
+else
+  echo "Error: Service file $SERVICE_FILE not found!"
+  exit 1
+fi
+
+# Step 3: Reload systemd daemon and restart the Ollama service
+echo "Reloading systemd daemon and restarting ollama.service..."
+sudo systemctl daemon-reload
+sudo systemctl restart ollama.service
+
+# Step 4: Update firewall rules to allow traffic on port 11434
+echo "Updating firewall settings..."
+sudo ufw allow 11434
+sudo ufw reload
+
+echo "Ollama update complete."
