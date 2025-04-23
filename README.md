@@ -13,6 +13,8 @@ git clone https://github.com/anson70242/ollama_client_update.git
 2. Move the script to a system-wide location and make it executable:
 ```sh
 sudo mv ollama_client_update/update_ollama /usr/local/bin/
+```
+```sh
 sudo chmod +x /usr/local/bin/update_ollama
 ```
 
