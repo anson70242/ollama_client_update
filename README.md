@@ -1,6 +1,6 @@
 # Ollama Client Configuration Helper  
 
-If you use Ollama with a client, every time you update Ollama, you need to manually add environment variables for it to work. This can be annoying and repetitive.  
+If you use Ollama client, every time you update Ollama, you need to manually add environment variables for it to work. This can be annoying and repetitive.  
 
 This repository provides a simple shell script that automatically updates the configuration file.  
 With just one command, you can automatically configure Ollama correctly with the update.
